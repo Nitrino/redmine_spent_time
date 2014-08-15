@@ -35,17 +35,22 @@ class SpentTimeController < ApplicationController
 
   # Show the report of spent time between two dates for an user
   def report
+    @current_url = current_url
     @user = User.current
     projects = nil
-    if (authorized_for?(:view_others_spent_time))
+    if (authorized_for?(:view_every_project_spent_time))
+      @users = User.find(:all, :conditions => ["status = 1"])
+    elsif (authorized_for?(:view_others_spent_time))
       projects = User.current.projects
+      @users = []
+      projects.each { |project| @users.concat(project.users) }
+      @users.uniq!
+    else
+      @users = [@user]
     end
     make_time_entry_report(params[:from], params[:to], params[:user], projects)
     another_user = User.find(params[:user])
     @same_user = (@user.id == another_user.id)
-    respond_to do |format|
-      format.js
-    end
   end
 
   # Delete a time entry
@@ -180,5 +185,8 @@ class SpentTimeController < ApplicationController
     allowed = project.allows_to?(:log_time)
     return allowed ? project : nil;
   end
-
+  
+  def current_url(overwrite={})
+    url_for :only_path => false, :params => params.merge(overwrite)
+  end
 end

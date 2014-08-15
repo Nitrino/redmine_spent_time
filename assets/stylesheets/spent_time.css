@@ -59,3 +59,7 @@ input#time_entry_comments {
     white-space: pre-wrap; 
     wordwrap: break-word;
 }
+
+textarea#current_url {
+    width: 90%;
+}

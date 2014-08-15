@@ -32,11 +32,11 @@
         <%= text_field_tag('to', @to, :size => 10) %> <%= calendar_for('to') %>
       </span>
       <%= submit_tag l(:button_apply), :name => nil, :id => "submit_report" %>
+      <% @params = {} unless @params%>
     </p>
   </fieldset>
 <% end %>
-<div id='report'>
-  <!-- Here goes the report's result -->
-   <%= render :partial => 'report_menu_options' %>
-   <%= render :partial => 'time_entries_report' %>
-</div>
+
+<%= label 'current_url', t(:current_url) + ':' %>
+<%= text_area_tag 'current_url', @current_url, rows: 2 %>
+<%= render :partial => 'time_entries_report' %>
