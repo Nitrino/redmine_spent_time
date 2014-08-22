@@ -36,7 +36,7 @@ class SpentTimeController < ApplicationController
   # Show the report of spent time between two dates for an user
   def report
     @current_url = current_url
-    @user = User.current
+    @user = params[:user].nil? ? User.current : User.find(params[:user])
     projects = nil
     if (authorized_for?(:view_every_project_spent_time))
       @users = User.find(:all, :conditions => ["status = 1"])
@@ -70,7 +70,7 @@ class SpentTimeController < ApplicationController
   rescue ::ActionController::RedirectBackError
     redirect_to :action => 'index'
   end
-  
+
   # Update a time entry in line
   def update_entry
     @time_entry = TimeEntry.find(params[:entry])
@@ -84,7 +84,7 @@ class SpentTimeController < ApplicationController
     if (@time_entry.save!)
       flash[:notice] = l("time_entry_updated_notice")
       respond_to do |format|
-        format.js 
+        format.js
         format.json { head :ok }
       end
     end
@@ -175,8 +175,8 @@ class SpentTimeController < ApplicationController
   end
 
   private
-  
-  def is_numeric?(obj) 
+
+  def is_numeric?(obj)
    obj.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 
@@ -185,7 +185,7 @@ class SpentTimeController < ApplicationController
     allowed = project.allows_to?(:log_time)
     return allowed ? project : nil;
   end
-  
+
   def current_url(overwrite={})
     url_for :only_path => false, :params => params.merge(overwrite)
   end
