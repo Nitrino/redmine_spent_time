@@ -8,7 +8,7 @@
         /* Activating Best In Place */
         jQuery(".best_in_place").best_in_place();
         $('.best_in_place').bind("ajax:success", function () {$(this).closest('tr').effect('highlight'); });
-        $('.best_in_place').bind("ajax:error", function () {$(this).closest('tr').effect('bounce'); });      
+        $('.best_in_place').bind("ajax:error", function () {$(this).closest('tr').effect('bounce'); });
       });
     </script>
 <% end %>
@@ -38,5 +38,6 @@
 <% end %>
 
 <%= label 'current_url', t(:current_url) + ':' %>
+<br>
 <%= text_area_tag 'current_url', @current_url, rows: 2 %>
 <%= render :partial => 'time_entries_report' %>
